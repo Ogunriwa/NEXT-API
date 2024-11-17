@@ -8,11 +8,11 @@ const prisma = new PrismaClient()
 // POST ROUTE
 
 export async function POST(request: NextRequest) {
-  const {name, email } = await request.json();
+  const {email, password } = await request.json();
 
   // Validate Input data
 
-  if (!name || !email) {
+  if (!email) {
     return NextResponse.json(
       {message: "Input email and name"}, 
       {status: 400})
@@ -21,8 +21,8 @@ export async function POST(request: NextRequest) {
         try {
             const newUseruser = await prisma.user.create({
                 data: {
-                    name,
-                    email,
+                    
+                    email, password
                 },
             });
           return NextResponse.json(newUseruser, {status: 201});

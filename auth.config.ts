@@ -1,9 +1,7 @@
-import NextAuth from 'next-auth';
+import { NextAuthOptions, User as NextAuthUser } from 'next-auth';
 import { PrismaClient, User } from '@prisma/client';
-import {NextAuthOptions} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {z} from "zod";
-import {sql} from "@vercel/postgres";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient()
@@ -35,7 +33,7 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "Email", type: "email", placeholder: "email@example.com" },
                 password: {label: "Password", type: "password"},
             },
-            async authorize(credentials): Promise<User | null> {
+            async authorize(credentials): Promise<NextAuthUser | null> {
                 const parsedCredentials = z.object({email: z.string().email(), password: z.string().min(6)}) 
                 .safeParse(credentials);
                 if (parsedCredentials.success) {
@@ -58,4 +56,30 @@ export const authOptions: NextAuthOptions = {
 
 
     ],
+
+    callbacks : {
+
+        async jwt({token, user}) {
+            if(user) {
+                token.id = user.id;
+                token.email = user.email ?? '';
+            }
+            return token
+        } ,
+
+        async session({ session, token }) {
+
+            if(session.user) {
+
+                session.user.id = token.id as string
+                session.user.email = token.email as string
+            }
+
+            return session;
+        }
+
+
+
+
+    }
 }
