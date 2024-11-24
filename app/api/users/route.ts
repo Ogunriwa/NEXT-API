@@ -87,7 +87,7 @@ export async function PUT(request: NextRequest) {
   }
 
   catch(error) {
-    console.error('Internal Sever Error')
+    console.error('Internal Sever Error', error)
     return NextResponse.json({message: "Internal Server Error "}, {status: 500})
   }
 
@@ -131,7 +131,7 @@ export async function PATCH(request: NextRequest) {
 
   catch(error) {
 
-    console.error("Error updating password")
+    console.error("Error updating password", error)
     return NextResponse.json({message: "Internal Server Error "}, {status: 500})
   }
 
