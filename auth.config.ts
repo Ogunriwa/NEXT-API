@@ -2,7 +2,7 @@ import { NextAuthOptions, User as NextAuthUser } from 'next-auth';
 import { PrismaClient, User } from '@prisma/client';
 import CredentialsProvider from "next-auth/providers/credentials";
 import {z} from "zod";
-import bcrypt from "bcrypt";
+import {hash, compare} from "bcryptjs";
 
 const prisma = new PrismaClient()
 
@@ -42,9 +42,14 @@ export const authOptions: NextAuthOptions = {
                     
                     
                     if (!user || !user.password) return null;
-                    const passwordsMatch = await bcrypt.compare(password, user.password)
+                    const passwordsMatch = await compare(password, user.password)
 
-                    if (passwordsMatch) return user
+                    if (passwordsMatch) {
+                        const {password: _, ...userWithoutPassword} = user
+                        return userWithoutPassword as NextAuthUser
+                    }
+
+                    return null
                 }
 
                 return null
