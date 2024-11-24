@@ -1,7 +1,8 @@
-import NextAuth from 'next-auth'
-import { authOptions } from  '@/auth.config'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';   
 
-export default NextAuth(authOptions).auth;
+import { authOptions } from './auth.config'; // Import your NextAuth options
+import NextAuth from "next-auth/middleware";
 
 export const config = {
 
