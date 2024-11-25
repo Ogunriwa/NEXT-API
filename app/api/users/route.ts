@@ -87,7 +87,7 @@ export async function PUT(request: NextRequest) {
   }
 
   catch(error) {
-    console.error('Internal Sever Error', error)
+    console.error('Internal Sever Error',)
     return NextResponse.json({message: "Internal Server Error "}, {status: 500})
   }
 

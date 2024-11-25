@@ -7,7 +7,7 @@ export const GET = async () => {
     const session: { user: { id: string, email: string } } | null = await getServerSession(authOptions)
 
     if(!session) {
-        return NextResponse.json({message: "You mus be logged in"}, {status: 401})
+        return NextResponse.json({message: "You must be logged in"}, {status: 401})
     }
 
     return NextResponse.json({
